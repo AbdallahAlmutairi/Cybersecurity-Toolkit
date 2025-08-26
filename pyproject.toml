@@ -1,0 +1,46 @@
+[project]
+name = "cybersecurity-toolkit"
+version = "0.1.0"
+description = "Cybersecurity Toolkit CLI"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "typer[all]",
+  "rich",
+  "requests",
+  "dnspython",
+  "cryptography",
+  "aiohttp",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-asyncio",
+  "pytest-httpserver",
+  "ruff",
+  "black",
+  "isort",
+  "pre-commit",
+  "build",
+  "setuptools",
+  "wheel",
+]
+
+[project.scripts]
+cybertool = "cybertool.cli:app"
+
+[tool.pytest.ini_options]
+addopts = "-q"
+
+[tool.black]
+line-length = 88
+target-version = ["py311", "py312"]
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+fix = false
