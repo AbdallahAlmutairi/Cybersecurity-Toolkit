@@ -1,0 +1,34 @@
+[project]
+name = "cybertool"
+version = "0.1.0"
+description = "Beginner friendly cybersecurity toolkit"
+authors = [{name = "OpenAI", email = "example@example.com"}]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+    "typer[all]",
+    "rich",
+    "requests",
+    "dnspython",
+    "cryptography",
+    "aiohttp",
+]
+optional-dependencies = { whois = ["python-whois"] }
+
+[project.scripts]
+cybertool = "cybertool.cli:app"
+
+[tool.pytest.ini_options]
+addopts = "-q"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+line-length = 88
+
