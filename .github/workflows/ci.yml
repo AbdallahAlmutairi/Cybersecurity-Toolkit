@@ -1,6 +1,8 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 
 jobs:
   build:
@@ -8,16 +10,34 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11", "3.12"]
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
       - name: Install dependencies
-        run: pip install .[whois] pytest pytest-asyncio pytest-httpserver pre-commit build
-      - name: Lint
-        run: pre-commit run --files $(git ls-files '*.py')
+        run: |
+          python -m pip install --upgrade pip
+          # ثبّت الحزمة + تبع dev (اختبارات/لينت)
+          pip install ".[dev]" build
+          # في حال عندك whois اختياري (يتجاهل الفشل)
+          pip install python-whois || true
+
+      - name: Lint (ruff + isort + black checks)
+        run: |
+          ruff check .
+          isort --check-only .
+          black --check .
+
       - name: Test
-        run: pytest
-      - name: Build
-        run: python -m build
+        run: |
+          pytest -q
+
+      - name: Build package
+        run: |
+          python -m build
